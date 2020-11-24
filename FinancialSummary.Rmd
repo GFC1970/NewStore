@@ -14,6 +14,12 @@ source("data-prepare.R")
 source("summary-plots.R")
 ```
 <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+<style type="text/css">
+body * {font-family:Roboto Condensed}
+p {font-size:14pt}
+h1 {font-size:30pt;color:white;background:#4682B4;padding:7px}
+h2 {font-weight:700;border-bottom:2px solid #4682B4;padding:5px}
+</style>
 
 ## Financial Summary
 
