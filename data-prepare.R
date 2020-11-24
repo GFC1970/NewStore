@@ -9,7 +9,7 @@ library(ggsci)
 
 
 # Main data
-
+data_tbl <- read_csv("data/2015.csv")
 
 # Dimensions
 
