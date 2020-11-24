@@ -41,7 +41,7 @@ annual_revenue_plot <- data_tbl %>%
   scale_y_continuous(expand = expansion(mult = c(0, .2)), labels = scales::comma_format(scale = 1e-3, prefix = "\u00A3", suffix = "k")) +
   myTheme
 
-annual_revenue_plot
+
 
 annual_monthly_revenue_plot <- data_tbl %>%
   select(order_date, total_revenue) %>%
@@ -54,16 +54,19 @@ annual_monthly_revenue_plot <- data_tbl %>%
   geom_hline(aes(yintercept = 0), colour = "black") +
   labs(
     title = "Total Revenue by Year and Month",
-    subtitle = paste0("Total Revenue of ", scales::dollar(sum(data_tbl$total_revenue), prefix = "£")),
+    subtitle = paste0("Total Revenue of ", scales::dollar(sum(data_tbl$total_revenue), prefix = "\u00A3")),
     caption = paste0("Plot name: annual_monthly_revenue_plot\nProduced on: ", format(Sys.Date(), "%d %b %Y")),
     x = NULL,
     y = NULL
   ) +
   scale_x_date(date_breaks = "1 months", date_labels = "%b") +
-  scale_y_continuous(expand = expansion(mult = c(0, .25)), labels = scales::comma_format(scale = 1e-3, prefix = "£", suffix = "k")) +
+  scale_y_continuous(expand = expansion(mult = c(0, .25)), labels = scales::comma_format(scale = 1e-3, prefix = "\u00A3", suffix = "k")) +
   scale_fill_futurama() +
   facet_wrap(~ year, scales = "free_x") +
-  myTheme
+  myTheme +
+  theme(
+    axis.text.x = element_text(size = 12)
+  )
 
-annual_monthly_revenue_plot
+
 
