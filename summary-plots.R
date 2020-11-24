@@ -33,12 +33,12 @@ annual_revenue_plot <- data_tbl %>%
   geom_hline(aes(yintercept = 0), colour = "black") +
   labs(
     title = "Total Annual Revenue",
-    subtitle = paste0("Total Revenue of ", scales::dollar(sum(data_tbl$total_revenue), prefix = "£")),
+    subtitle = paste0("Total Revenue of ", scales::dollar(sum(data_tbl$total_revenue), prefix = "\u00A3")),
     caption = paste0("Plot name: annual_revenue_plot\nProduced on: ", format(Sys.Date(), "%d %b %Y")),
     x = NULL,
     y = NULL
   ) +
-  scale_y_continuous(expand = expansion(mult = c(0, .2)), labels = scales::comma_format(scale = 1e-3, prefix = "£", suffix = "k")) +
+  scale_y_continuous(expand = expansion(mult = c(0, .2)), labels = scales::comma_format(scale = 1e-3, prefix = "\u00A3", suffix = "k")) +
   myTheme
 
 annual_revenue_plot
