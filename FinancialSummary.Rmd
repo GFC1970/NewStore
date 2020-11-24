@@ -27,5 +27,11 @@ A total revenue of £`r scales::comma(sum(data_tbl$total_revenue))` has been rec
 
 ```{r echo=FALSE, fig.width=10, fig.height=6}
 annual_revenue_plot
+
+```
+
+
+```{r echo=FALSE, fig.width=12, fig.height=8}
+annual_monthly_revenue_plot
 ```
 
