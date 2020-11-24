@@ -72,11 +72,16 @@ rm(data_dir)
 # Export data to two new files based on customer type values of retail or wholesale
 # and save files as csv in the reports sub-folder
 data_tbl %>%
+  # group by customer type
   group_by(customer_type) %>%
+  # Split into tibbles based on customer type
   group_split() %>%
+  # use map function to run write_csv function on tibbles
   map(
     .f = function(df) {
+      # Create filename
       filename <- paste0("reports/", unique(df$customer_type), ".csv")
+      # Save to csv
       write_csv(df, filename, col_names = TRUE)
     }
   )
