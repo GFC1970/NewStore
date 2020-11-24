@@ -4,9 +4,12 @@
 options(echo = FALSE)
 
 # Load Libraries
+library(tidytext)
 library(tidyverse)
+library(tidyquant)
 library(lubridate)
 library(extrafont)
+
 library(ggsci)
 
 # Load Dimensions Data ----
