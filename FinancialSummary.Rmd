@@ -1,0 +1,25 @@
+---
+title: "New Store"
+author: "Graham Cox"
+date: "24 November 2020"
+output: html_document
+---
+
+```{r setup, echo=FALSE, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+```{r echo=FALSE, include=FALSE}
+source("data-prepare.R")
+source("summary-plots.R")
+```
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+## Financial Summary
+
+A total revenue of £`r scales::comma(sum(data_tbl$total_revenue))` has been received since `r format(min(data_tbl$order_date), "%d %b %Y")`
+
+```{r echo=FALSE, fig.width=10, fig.height=6}
+annual_revenue_plot
+```
+
