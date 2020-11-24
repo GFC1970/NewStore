@@ -1,4 +1,4 @@
-product_index,product,product_cost,product_price
+product_id,product,product_cost,product_price
 1,Andalax-Small-Yellow-Common,0.49819,1.311
 2,Andalax-Medium-Blue-Common,0.77771,2.1603
 3,Andalax-Large-Red-Common,0.86308,2.2713
