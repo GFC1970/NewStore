@@ -11,7 +11,7 @@ theme_set(theme_minimal(base_family = "Roboto Condensed", base_size = 20))
 
 # Custom theme settings
 myTheme <- theme(
-  plot.margin = unit(c(.3,1,.3,1), "cm"),
+  plot.margin = unit(c(.3,1,.3,0), "cm"),
   plot.title = element_text(size = 22, colour = "steelblue", face = "bold"),
   plot.subtitle = element_text(size = 16),
   plot.caption = element_text(size = 11, colour = "grey70", hjust = 0),
