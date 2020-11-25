@@ -1,7 +1,7 @@
 ---
 title: "New Store"
 author: "Graham Cox"
-date: "24 November 2020"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: html_document
 ---
 
@@ -9,40 +9,45 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 
 ```
-```{r echo=FALSE, include=FALSE}
+```{r warnings = FALSE, results="hide", message=FALSE, echo=FALSE, include=FALSE}
 library(knitr)
 library(kableExtra)
 source("data-prepare.R")
 source("summary-plots.R")
 ```
-<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
 <style type="text/css">
 body * {font-family:Roboto Condensed}
 p {font-size:14pt}
 h1 {font-size:30pt;color:white;background:#4682B4;padding:7px}
 h2 {font-weight:700;border-bottom:2px solid #4682B4;padding:5px}
+table thead th { border-bottom: 2px solid #4682B4; }
+th, td { padding: 7px; }
+<!-- thead, tfoot, tr:nth-child(even) { background: #eee; } -->
 </style>
 
 ## Financial Summary
 
 A total revenue of £`r scales::comma(sum(data_tbl$total_revenue))` has been received since `r format(min(data_tbl$order_date), "%d %b %Y")`. Current year revenue is £ `r scales::comma(sum(data_tbl$total_revenue[data_tbl$order_date >= as.Date("2020-01-01")]))`.
 
-```{r echo=FALSE, include=TRUE}
+```{r echo=FALSE, include=TRUE, out.width="90%"}
 
 data_tbl %>% 
   mutate(Year = order_date %>% year()) %>% 
   group_by(Year) %>% 
-  summarise(Revenue = sum(total_revenue), 
-            Units = sum(order_units),
-            COGS = sum(total_cogs), .groups = "drop") %>% 
-  mutate(Revenue = paste0("\u00A3", scales::comma(Revenue)),
-         Units = scales::comma(Units),
-         COGS = paste0("\u00A3", scales::comma(COGS))) %>% 
-  kable(align = c("l", "r", "r", "r"), caption = "Total Revenue by Year") %>% 
+  summarise(revenue = sum(total_revenue), 
+            units = sum(order_units),
+            cogs = sum(total_cogs),
+            profit = revenue - cogs, .groups = "drop") %>% 
+  mutate(revenue = paste0("\u00A3", scales::comma(revenue)),
+         units = scales::comma(units),
+         cogs = paste0("\u00A3", scales::comma(cogs)),
+         profit = paste0("\u00A3", scales::comma(profit))) %>% 
+  kable(align = c("l", "r", "r", "r", "r"), caption = "Total Revenue by Year", col.names = c("Year", "Revenue", "Units", "Cost of Goods", "Profit")) %>% 
   kable_styling(bootstrap_options = "striped", full_width = FALSE, position = "left") %>% 
-  column_spec(2, bold = TRUE) %>% 
+  column_spec(c(2, 5), bold = TRUE) %>% 
   column_spec(3:4, italic = TRUE) %>% 
-  column_spec(2:4, width = "2in")
+  column_spec(2:5, width = "20%")
 
 ```
 
@@ -60,3 +65,8 @@ annual_revenue_plot
 annual_monthly_revenue_plot
 ```
 
+
+# Appendix 1 - Session information
+```{r sessionInfo}
+sessionInfo()
+```
