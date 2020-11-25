@@ -2,14 +2,18 @@
 title: "New Store"
 author: "Graham Cox"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-output: html_document
+output: 
+  html_document:
+    toc: TRUE
+    toc_float: TRUE
+    toc_depth: 4
 ---
 
 ```{r setup, echo=FALSE, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
 ```
-```{r warnings = FALSE, results="hide", message=FALSE, echo=FALSE, include=FALSE}
+```{r warnings=FALSE, results="hide", message=FALSE, echo=FALSE, include=FALSE}
 library(knitr)
 library(kableExtra)
 source("data-prepare.R")
@@ -21,6 +25,7 @@ body * {font-family:Roboto Condensed}
 p {font-size:14pt}
 h1 {font-size:30pt;color:white;background:#4682B4;padding:7px}
 h2 {font-weight:700;border-bottom:2px solid #4682B4;padding:5px}
+h3 {font-weight:700lcolor:#4682B4}
 table thead th { border-bottom: 2px solid #4682B4; }
 th, td { padding: 7px; }
 <!-- thead, tfoot, tr:nth-child(even) { background: #eee; } -->
@@ -65,8 +70,38 @@ annual_revenue_plot
 annual_monthly_revenue_plot
 ```
 
+# Appendices
 
-# Appendix 1 - Session information
+## Appendix 1 - Data Structures
+
+### Factor Levels
+
+```{r echo=FALSE, include=FALSE}
+products <- str_c(unique(data_tbl$product_name), collapse = ", ")
+categories <- str_c(unique(data_tbl$product_category), collapse = ", ")
+sizes <- str_c(unique(data_tbl$product_size), collapse = ", ")
+colours <- str_c(unique(data_tbl$product_colour), collapse = ", ")
+```
+
+#### **Products Names**
+
+`r products`
+
+#### **Product Categories**
+
+`r categories`
+
+#### **Product Sizes**
+
+`r sizes`
+
+#### **Product Colours**
+
+`r colours`
+
+\newpage
+
+## Appendix 2 - Session information
 ```{r sessionInfo}
 sessionInfo()
 ```
