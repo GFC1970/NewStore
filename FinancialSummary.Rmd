@@ -23,15 +23,16 @@ h2 {font-weight:700;border-bottom:2px solid #4682B4;padding:5px}
 
 ## Financial Summary
 
-A total revenue of £`r scales::comma(sum(data_tbl$total_revenue))` has been received since `r format(min(data_tbl$order_date), "%d %b %Y")`
+A total revenue of £`r scales::comma(sum(data_tbl$total_revenue))` has been received since `r format(min(data_tbl$order_date), "%d %b %Y")`.
 
-```{r echo=FALSE, fig.width=10, fig.height=6}
+```{r annual_plot, echo=FALSE, fig.width=10, fig.height=6}
 annual_revenue_plot
 
 ```
 
+### Monthly Revenue by Year
 
-```{r echo=FALSE, fig.width=12, fig.height=8}
+```{r monthly_plot, echo=FALSE, fig.width=12, fig.height=8}
 annual_monthly_revenue_plot
 ```
 
