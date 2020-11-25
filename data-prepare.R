@@ -1,8 +1,5 @@
 # ---- Main Data Load & Transformations ----
 
-# Turn off console echo
-options(echo = FALSE)
-
 # Load Libraries
 library(tidytext)
 library(tidyverse)
