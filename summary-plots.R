@@ -17,7 +17,7 @@ theme_set(
 # Custom theme settings
 myTheme <- theme(
   # Plot parameters
-  plot.margin = unit(c(.3,1,.3,0), "cm"),
+  plot.margin = unit(c(.3,1,.3,.1), "cm"),
   plot.title = element_text(size = 22, colour = "steelblue", face = "bold"),
   plot.subtitle = element_text(size = 16),
   plot.caption = element_text(size = 11, colour = "grey70", hjust = 0),
@@ -46,7 +46,7 @@ annual_revenue_plot <- data_tbl %>%
   # Create plot
   ggplot(aes(year, revenue)) +
   # Set plot type
-  geom_col(fill = "yellowgreen") +
+  geom_col(fill = "#4682B4") +
   # Add labels
   labs(
     title = "Total Annual Revenue",
