@@ -7,24 +7,32 @@ options(echo = FALSE)
 source("data-prepare.R")
 
 # Set theme
-theme_set(
-  theme_minimal(
-    base_family = "Roboto Condensed",
-    base_size = 20
-    )
-  )
+theme_set(theme_minimal(base_family = "Roboto Condensed",
+                        base_size = 20))
 
 # Custom theme settings
 myTheme <- theme(
   # Plot parameters
-  plot.margin = unit(c(.3,1,.3,.1), "cm"),
-  plot.title = element_text(size = 22, colour = "steelblue", face = "bold"),
+  plot.margin = unit(c(.3, 1, .3, .1), "cm"),
+  plot.title = element_text(
+    size = 22,
+    colour = "steelblue",
+    face = "bold"
+  ),
   plot.subtitle = element_text(size = 16),
-  plot.caption = element_text(size = 11, colour = "grey70", hjust = 0),
+  plot.caption = element_text(
+    size = 11,
+    colour = "grey70",
+    hjust = 0
+  ),
   # panel parameters
   panel.spacing.y = unit(.5, "cm"),
   panel.grid = element_blank(),
-  panel.grid.major.y = element_line(colour = "grey70", linetype = "dashed", size = .6),
+  panel.grid.major.y = element_line(
+    colour = "grey70",
+    linetype = "dashed",
+    size = .6
+  ),
   # Axis parameters
   axis.text = element_text(size = 12),
   # Strip parameters for facets
@@ -50,13 +58,25 @@ annual_revenue_plot <- data_tbl %>%
   # Add labels
   labs(
     title = "Total Annual Revenue",
-    subtitle = paste0("Total Revenue of ", scales::dollar(sum(data_tbl$total_revenue), prefix = "\u00A3")),
-    caption = paste0("Plot name: annual_revenue_plot\nProduced on: ", format(Sys.Date(), "%d %b %Y")),
+    subtitle = paste0("Total Revenue of ", scales::dollar(sum(
+      data_tbl$total_revenue
+    ), prefix = "\u00A3")),
+    caption = paste0(
+      "Plot name: annual_revenue_plot\nProduced on: ",
+      format(Sys.Date(), "%d %b %Y")
+    ),
     x = NULL,
     y = NULL
   ) +
   # Set format of Y axis labels
-  scale_y_continuous(expand = expansion(mult = c(0, .2)), labels = scales::comma_format(scale = 1e-3, prefix = "\u00A3", suffix = "k")) +
+  scale_y_continuous(
+    expand = expansion(mult = c(0, .2)),
+    labels = scales::comma_format(
+      scale = 1e-3,
+      prefix = "\u00A3",
+      suffix = "k"
+    )
+  ) +
   # Set myTheme
   myTheme
 
@@ -83,21 +103,46 @@ annual_monthly_revenue_plot <- data_tbl %>%
   # Add labels
   labs(
     title = "Total Revenue by Year and Month",
-    subtitle = paste0("Total Revenue of ", scales::dollar(sum(data_tbl$total_revenue), prefix = "\u00A3")),
-    caption = paste0("Plot name: annual_monthly_revenue_plot\nProduced on: ", format(Sys.Date(), "%d %b %Y")),
+    subtitle = paste0("Total Revenue of ", scales::dollar(sum(
+      data_tbl$total_revenue
+    ), prefix = "\u00A3")),
+    caption = paste0(
+      "Plot name: annual_monthly_revenue_plot\nProduced on: ",
+      format(Sys.Date(), "%d %b %Y")
+    ),
     x = NULL,
     y = NULL
   ) +
   # Format x axis labels as short month format
   scale_x_date(date_breaks = "1 months", date_labels = "%b") +
   # Format y axis labels
-  scale_y_continuous(expand = expansion(mult = c(0, .25)), labels = scales::comma_format(scale = 1e-3, prefix = "\u00A3", suffix = "k")) +
+  scale_y_continuous(
+    expand = expansion(mult = c(0, .25)),
+    labels = scales::comma_format(
+      scale = 1e-3,
+      prefix = "\u00A3",
+      suffix = "k"
+    )
+  ) +
   # Set colour scheme
   scale_fill_futurama() +
   # Facet plot by year
-  facet_wrap(~ year, scales = "free_x") +
+  facet_wrap( ~ year, scales = "free_x") +
   # Set myTheme
   myTheme
 
+units_by_date <- data_tbl %>%
+  filter(product_size == "Small") %>%
+  select(product_category, order_date, order_units) %>%
+  mutate(year = order_date %>% year() %>% as_factor()) %>%
+  group_by(product_category, year, order_date) %>%
+  summarise(total_units = sum(order_units), .groups = "drop") %>%
+  ggplot(aes(order_date, total_units, colour = year)) +
+  geom_point(show.legend = FALSE, aes(colour = product_category)) +
+  geom_smooth(method = "loess", show.legend = FALSE) +
+  facet_grid(product_category ~ year, scales = "free_x") +
+  scale_colour_futurama() +
+  scale_x_date(date_breaks = "3 months", date_labels = "%b") +
+  myTheme
 
-
+units_by_date

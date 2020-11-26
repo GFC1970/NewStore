@@ -6,7 +6,7 @@ library(tidyverse)
 library(tidyquant)
 library(lubridate)
 library(extrafont)
-
+library(ggridges)
 library(ggsci)
 
 # Load Dimensions Data ----
