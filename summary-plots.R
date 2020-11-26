@@ -131,18 +131,25 @@ annual_monthly_revenue_plot <- data_tbl %>%
   # Set myTheme
   myTheme
 
-units_by_date <- data_tbl %>%
-  filter(product_size == "Small") %>%
-  select(product_category, order_date, order_units) %>%
-  mutate(year = order_date %>% year() %>% as_factor()) %>%
-  group_by(product_category, year, order_date) %>%
-  summarise(total_units = sum(order_units), .groups = "drop") %>%
-  ggplot(aes(order_date, total_units, colour = year)) +
-  geom_point(show.legend = FALSE, aes(colour = product_category)) +
-  geom_smooth(method = "loess", show.legend = FALSE) +
-  facet_grid(product_category ~ year, scales = "free_x") +
-  scale_colour_futurama() +
-  scale_x_date(date_breaks = "3 months", date_labels = "%b") +
-  myTheme
 
-units_by_date
+variance_data <- data_tbl %>%
+  select(order_date, order_units) %>%
+  mutate(month = floor_date(order_date, unit = "months")) %>%
+  group_by(month) %>%
+  summarise(units = sum(order_units), .groups = "drop") %>%
+  mutate(units_lag = lag(units, n = 1)) %>%
+  mutate(units_lag = case_when(
+    is.na(units_lag) ~ units,
+    TRUE ~ units_lag
+  )) %>%
+  mutate(units_var = units - units_lag) %>%
+  mutate(units_var_percent = units_var / units_lag) %>%
+  mutate(units_var_percent_text = units_var_percent %>% scales::percent(accuracy = 2)) %>%
+  select(month, units_var_percent_text, units_var_percent)
+
+variance_plot <- variance_data %>%
+  ggplot(aes(month, units_var_percent)) +
+  geom_col()
+
+
+
