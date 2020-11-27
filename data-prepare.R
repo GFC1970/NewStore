@@ -10,20 +10,20 @@ library(ggridges)
 library(ggsci)
 
 # Load Dimensions Data ----
-customers_tbl <- read.csv("dimensions/customers.csv")
-products_tbl <- read.csv("dimensions/products.csv")
+customers_tbl <- read_csv("dimensions/customers.csv")
+products_tbl <- read_csv("dimensions/products.csv")
 
 # Load fact data ----
 # Data directory containing fact data files
 data_dir <- "data"
-
 # Load data from directory and use map to load all files into a data frame
 # join to dimension tibbles
 # transform columns by splitting and mutating
 data_tbl <- data_dir %>%
   # Create a list of files from the data directory
   fs::dir_ls() %>%
-  # Load files from list of files into data frame using read_csv
+  # Load files from list of files into data frame using read_csv and
+  # map_dfr to create one dataframe tibble
   map_dfr(read_csv) %>%
   # Join fact tibble to dimension tibbles using inner joins
   # products table contains different naming for main lookup column
@@ -69,19 +69,23 @@ rm(products_tbl)
 # Remove data directory object
 rm(data_dir)
 
+paste0("File output for customer names starts :", message(Sys.time()))
+
 # Export data to two new files based on customer type values of retail or wholesale
 # and save files as csv in the reports sub-folder
 data_tbl %>%
   # group by customer type
-  group_by(customer_type) %>%
+  group_by(customer_name) %>%
   # Split into tibbles based on customer type
   group_split() %>%
   # use map function to run write_csv function on tibbles
   map(
     .f = function(df) {
       # Create filename
-      filename <- paste0("reports/", unique(df$customer_type), ".csv")
+      filename <- paste0("reports/", unique(df$customer_name), ".csv")
       # Save to csv
       write_csv(df, filename, col_names = TRUE)
     }
   )
+
+paste0("File output for customer names ends :", message(Sys.time()))
