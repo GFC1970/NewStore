@@ -134,8 +134,9 @@ annual_monthly_revenue_plot <- data_tbl %>%
 
 variance_data <- data_tbl %>%
   select(order_date, order_units) %>%
+  mutate(year = order_date %>% year() %>% as_factor()) %>%
   mutate(month = floor_date(order_date, unit = "months")) %>%
-  group_by(month) %>%
+  group_by(year, month) %>%
   summarise(units = sum(order_units), .groups = "drop") %>%
   mutate(units_lag = lag(units, n = 1)) %>%
   mutate(units_lag = case_when(
@@ -145,11 +146,56 @@ variance_data <- data_tbl %>%
   mutate(units_var = units - units_lag) %>%
   mutate(units_var_percent = units_var / units_lag) %>%
   mutate(units_var_percent_text = units_var_percent %>% scales::percent(accuracy = 2)) %>%
-  select(month, units_var_percent_text, units_var_percent)
+  select(year, month, units_var_percent_text, units_var_percent)
 
-variance_plot <- variance_data %>%
-  ggplot(aes(month, units_var_percent)) +
-  geom_col()
+monthly_variance_plot <- variance_data %>%
+  ggplot(aes(month, units_var_percent, colour = year)) +
+  geom_line(size = 2) +
+  geom_area(aes(fill = year), alpha = .2) +
+  geom_hline(aes(yintercept = 0)) +
+  geom_text(aes(label = units_var_percent_text,
+                vjust = case_when(
+                  units_var_percent > 0 ~ -1.5,
+                  TRUE ~ 1.5
+                )), fontface = "bold", size = 4) +
+  facet_wrap(~ year, scales = "free_x") +
+  scale_fill_aaas() +
+  scale_x_date(date_breaks = "1 month", date_labels = "%b") +
+  scale_y_continuous(labels = scales::percent_format(), limits = c(-1, 1)) +
+  myTheme +
+  theme(legend.position = "none")
+
+monthly_variance_plot
+
+yoy_variance <- data_tbl %>%
+  select(order_date, order_units) %>%
+  mutate(year = order_date %>% year() %>% as_factor()) %>%
+  mutate(month = floor_date(order_date, unit = "months")) %>%
+  group_by(year, month) %>%
+  summarise(units = sum(order_units), .groups = "drop") %>%
+  mutate(prev_y_m = lag(units, n = 12)) %>%
+  mutate(prev_y_m = case_when(
+    is.na(prev_y_m) ~ units,
+    TRUE ~ prev_y_m)
+  ) %>%
+  mutate(prev_y_m_var = units - prev_y_m,
+         prev_y_m_var_pc = prev_y_m_var / prev_y_m)
 
 
 
+yoy_variance_plot <- yoy_variance %>%
+  filter(!year == 2015) %>%
+  ggplot(aes(month, prev_y_m_var_pc, fill = year)) +
+  geom_col(show.legend = FALSE) +
+  geom_text(aes(label = scales::percent(prev_y_m_var_pc, accuracy = .01, trim = TRUE),
+            vjust = case_when(
+              prev_y_m_var_pc > 0 ~ -1.1,
+              TRUE ~ 1.1
+            )), size = 3) +
+  facet_wrap(~ year, scales = "free_x") +
+  scale_fill_d3() +
+  scale_x_date(date_breaks = "1 month", date_labels = "%b") +
+  scale_y_continuous(labels = scales::percent_format(), limits = c(-1, 1)) +
+  myTheme
+
+yoy_variance_plot
