@@ -3,9 +3,6 @@
 # Set options
 options(echo = FALSE)
 
-# Source to data preparation
-source("data-prepare.R")
-
 # Set theme
 theme_set(theme_minimal(base_family = "Roboto Condensed",
                         base_size = 20))
