@@ -1,5 +1,7 @@
 # ---- Main Data Load & Transformations ----
 
+options(echo = FALSE)
+
 # Load Libraries
 library(tidytext)
 library(tidyverse)
@@ -31,7 +33,7 @@ data_tbl <- data_dir %>%
   inner_join(products_tbl, by = c("product_index" = "product_id")) %>%
   # Join fact table to customers tibble
   inner_join(customers_tbl) %>%
-  # Separate product colun into new columns based on - delimiter
+  # Separate product column into new columns based on - delimiter
   separate(col = product,
            into = c("product_name", "product_size", "product_colour", "product_category"),
            sep = "-") %>%
@@ -69,8 +71,7 @@ rm(products_tbl)
 # Remove data directory object
 rm(data_dir)
 
-paste0("File output for customer names starts :", message(Sys.time()))
-
+message(paste0("File output for customer names starts :", Sys.time()))
 # Export data to two new files based on customer type values of retail or wholesale
 # and save files as csv in the reports sub-folder
 data_tbl %>%
@@ -88,4 +89,11 @@ data_tbl %>%
     }
   )
 
-paste0("File output for customer names ends :", message(Sys.time()))
+message(paste0("File output for customer names ends :", Sys.time(), "\n", nrow(customer_files), " files created."))
+
+# Output list of customer files created to new csv file
+customer_files <- "reports" %>%
+  # Create a list of files from the reports directory
+  fs::dir_info() %>%
+  # Output to csv file
+  write_csv(file = "customer_files.csv", col_names = TRUE)
