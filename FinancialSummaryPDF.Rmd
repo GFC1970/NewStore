@@ -13,6 +13,9 @@ mainfont: Roboto Condensed
 \fontsize{12}{22}
 \selectfont
 
+
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, dev = "cairo_pdf", fig.height = 3)
 ```
@@ -21,10 +24,8 @@ knitr::opts_chunk$set(echo = TRUE, dev = "cairo_pdf", fig.height = 3)
 
 library(tidytext)
 library(tidyverse)
-library(tidyquant)
 library(lubridate)
 library(extrafont)
-library(ggridges)
 library(knitr)
 library(kableExtra)
 library(ggsci)
@@ -211,5 +212,24 @@ data_tbl %>%
     
       }
   )
+```
+
+
+\newpage
+
+# Appendices
+
+\newpage
+
+## Appendix 1 - Session Information
+
+
+```{r}
+
+devtools::session_info()[["packages"]] %>% 
+  select(package, loadedversion, source) %>% 
+  kable(row.names = FALSE) %>%
+  kable_styling(bootstrap_options = "striped")
+
 ```
 
