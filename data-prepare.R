@@ -1,19 +1,33 @@
 # ---- Main Data Load & Transformations ----
 
+msg <- paste0("Start Process : \t\t", Sys.time())
+
 options(echo = FALSE)
 
+msg <- paste0(msg, "\nLoad Libraries : \t\t", Sys.time())
+
+pacman::p_load(tidytext,
+               tidyverse,
+               lubridate,
+               extrafont,
+               ggsci)
+
 # Load Libraries
-library(tidytext)
-library(tidyverse)
-library(tidyquant)
-library(lubridate)
-library(extrafont)
-library(ggridges)
-library(ggsci)
+# library(tidytext)
+# library(tidyverse)
+# library(tidyquant)
+# library(lubridate)
+# library(extrafont)
+# library(ggridges)
+# library(ggsci)
+
+msg <- paste0(msg, "\nLoad Dimension data : \t\t", Sys.time())
 
 # Load Dimensions Data ----
 customers_tbl <- read_csv("dimensions/customers.csv")
 products_tbl <- read_csv("dimensions/products.csv")
+
+msg <- paste0(msg, "\nLoad Fact data : \t\t", Sys.time())
 
 # Load fact data ----
 # Data directory containing fact data files
@@ -64,6 +78,8 @@ data_tbl <- data_dir %>%
   # product index, customer index
   select(-contains(c("index", "id")), -c("product_cost", "product_price"))
 
+msg <- paste0(msg, "\nRemove dimension objects : \t", Sys.time())
+
 # Remove dimension tibbles for customers and products
 rm(customers_tbl)
 rm(products_tbl)
@@ -71,29 +87,42 @@ rm(products_tbl)
 # Remove data directory object
 rm(data_dir)
 
-message(paste0("File output for customer names starts :", Sys.time()))
-# Export data to two new files based on customer type values of retail or wholesale
-# and save files as csv in the reports sub-folder
-data_tbl %>%
-  # group by customer type
-  group_by(customer_name) %>%
-  # Split into tibbles based on customer type
-  group_split() %>%
-  # use map function to run write_csv function on tibbles
-  map(
-    .f = function(df) {
-      # Create filename
-      filename <- paste0("reports/", unique(df$customer_name), ".csv")
-      # Save to csv
-      write_csv(df, filename, col_names = TRUE)
-    }
-  )
+# msg <- paste0(msg, "\nOutput Customer Type files : \t\t", Sys.time())
+#
+#
+# # Export data to two new files based on customer type values of retail or wholesale
+# # and save files as csv in the reports sub-folder
+# data_tbl %>%
+#   # group by customer type
+#   group_by(customer_name) %>%
+#   # Split into tibbles based on customer type
+#   group_split() %>%
+#   # use map function to run write_csv function on tibbles
+#   map(
+#     .f = function(df) {
+#       # Create filename
+#       filename <- paste0("reports/", unique(df$customer_name), ".csv")
+#       # Save to csv
+#       write_csv(df, filename, col_names = TRUE)
+#     }
+#   )
 
-message(paste0("File output for customer names ends :", Sys.time(), "\n", nrow(customer_files), " files created."))
-
+msg <- paste0(msg, "\nOutput customer names : \t", Sys.time())
 # Output list of customer files created to new csv file
 customer_files <- "reports" %>%
   # Create a list of files from the reports directory
   fs::dir_info() %>%
   # Output to csv file
   write_csv(file = "customer_files.csv", col_names = TRUE)
+
+# Clear console to output process step timings
+cat("\014")
+
+msg <- paste0(msg, "\nEnd Process : \t\t\t", Sys.time())
+
+message(msg)
+
+
+
+
+

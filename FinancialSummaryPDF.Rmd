@@ -10,10 +10,15 @@ output:
 mainfont: Roboto Condensed
 ---
 
-\fontsize{12}{22}
+\fontsize{11}{18}
 \selectfont
 
 
+<style type="text/css">
+
+td {font-family: Roboto Condensed}
+
+</style>
 
 
 ```{r setup, include=FALSE}
@@ -26,8 +31,7 @@ library(tidytext)
 library(tidyverse)
 library(lubridate)
 library(extrafont)
-library(knitr)
-library(kableExtra)
+library(gt)
 library(ggsci)
 
 # Load Dimensions Data ----
@@ -128,21 +132,42 @@ Revenue amounts shown in £ GBP Sterling
 
 ```{r, echo=FALSE, warning=FALSE, include=TRUE, message=FALSE, error=FALSE}
 
-data_tbl %>% 
+t <- data_tbl %>% 
   select(order_date, product_category, total_revenue) %>% 
   mutate(yr = order_date %>% year() %>% as_factor(),
          mth = floor_date(order_date, unit = "month")) %>% 
-  group_by(yr, mth) %>% 
+  group_by(yr, mth, product_category) %>% 
   mutate(mth = mth %>% format("%b")) %>% 
   summarise(revenue = sum(total_revenue)) %>% 
   mutate(mth = mth %>% factor(levels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))) %>% 
+  mutate(yr = paste0("Yr", yr) %>% as_factor()) %>% 
   spread(key = yr, value = revenue) %>% 
-  rename(Month = mth) %>% 
-  mutate_if(is.numeric, scales::dollar_format(accuracy = 1, prefix = "")) %>% 
-  kable(align = "lrrrrrr") %>%
-  kable_styling(bootstrap_options = "striped", full_width = TRUE, font_size = 12) %>% 
-  row_spec(0, bold = TRUE)
-  
+  rename(Month = mth, Category = product_category)
+
+
+t1 <- gt(t, groupname_col = "Category") %>% 
+  fmt_number(columns = vars(Yr2015,Yr2016,Yr2017,Yr2018,Yr2019,Yr2020),
+               decimals = 0)
+
+t2 <- t1 %>% tab_style(
+  style = cell_text(weight = "bold"),
+    locations = cells_body(
+      columns =vars(Yr2015,Yr2016,Yr2017,Yr2018,Yr2019,Yr2020))
+)
+ 
+t3 <- t2 %>% tab_options(table.font.names = "Roboto Condensed",
+              summary_row.background.color = "#ACEACE80",
+    row_group.background.color = "#FFEFDB80",
+    table.font.color = "blue",
+    table_body.hlines.color = "#989898",
+    table_body.border.top.color = "#989898",
+    heading.border.bottom.color = "#989898",
+    row_group.border.top.color = "#989898",
+    row_group.border.bottom.style = "none",
+    table.width = pct(100))
+
+t3
+
 
 ```
 
@@ -216,20 +241,4 @@ data_tbl %>%
 
 
 \newpage
-
-# Appendices
-
-\newpage
-
-## Appendix 1 - Session Information
-
-
-```{r}
-
-devtools::session_info()[["packages"]] %>% 
-  select(package, loadedversion, source) %>% 
-  kable(row.names = FALSE) %>%
-  kable_styling(bootstrap_options = "striped")
-
-```
 
