@@ -87,40 +87,10 @@ rm(products_tbl)
 # Remove data directory object
 rm(data_dir)
 
-# msg <- paste0(msg, "\nOutput Customer Type files : \t\t", Sys.time())
-#
-#
-# # Export data to two new files based on customer type values of retail or wholesale
-# # and save files as csv in the reports sub-folder
-# data_tbl %>%
-#   # group by customer type
-#   group_by(customer_name) %>%
-#   # Split into tibbles based on customer type
-#   group_split() %>%
-#   # use map function to run write_csv function on tibbles
-#   map(
-#     .f = function(df) {
-#       # Create filename
-#       filename <- paste0("reports/", unique(df$customer_name), ".csv")
-#       # Save to csv
-#       write_csv(df, filename, col_names = TRUE)
-#     }
-#   )
-
-# msg <- paste0(msg, "\nOutput customer names : \t", Sys.time())
-# # Output list of customer files created to new csv file
-# customer_files <- "reports" %>%
-#   # Create a list of files from the reports directory
-#   fs::dir_info() %>%
-#   # Output to csv file
-#   write_csv(file = "customer_files.csv", col_names = TRUE)
-#
-
-#
-# msg <- paste0(msg, "\nEnd Process : \t\t\t", Sys.time())
-
 # Clear console to output process step timings
 cat("\014")
+
+# Output timings
 message(msg)
 
 rm(msg)
