@@ -107,22 +107,22 @@ rm(data_dir)
 #     }
 #   )
 
-msg <- paste0(msg, "\nOutput customer names : \t", Sys.time())
-# Output list of customer files created to new csv file
-customer_files <- "reports" %>%
-  # Create a list of files from the reports directory
-  fs::dir_info() %>%
-  # Output to csv file
-  write_csv(file = "customer_files.csv", col_names = TRUE)
+# msg <- paste0(msg, "\nOutput customer names : \t", Sys.time())
+# # Output list of customer files created to new csv file
+# customer_files <- "reports" %>%
+#   # Create a list of files from the reports directory
+#   fs::dir_info() %>%
+#   # Output to csv file
+#   write_csv(file = "customer_files.csv", col_names = TRUE)
+#
+
+#
+# msg <- paste0(msg, "\nEnd Process : \t\t\t", Sys.time())
 
 # Clear console to output process step timings
 cat("\014")
-
-msg <- paste0(msg, "\nEnd Process : \t\t\t", Sys.time())
-
 message(msg)
 
-
-
+rm(msg)
 
 
