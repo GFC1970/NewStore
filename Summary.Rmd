@@ -5,6 +5,10 @@ date: "`r format(Sys.time(), '%b %Y')`"
 output: 
   html_document:
     number_sections: TRUE
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
 ---
 
 ```{r setup, include=FALSE}
@@ -51,7 +55,7 @@ Profit - `r scales::dollar(sum(data_tbl$total_revenue) - sum(data_tbl$total_cogs
 
 ::: {.column width="40%"}
 
-> Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec vel vulputate justo. Quisque auctor mauris eu lacus viverra, sit amet ultricies ligula malesuada. Nunc tempus dui eget ante sollicitudin elementum et ut felis. Nam tristique mauris non turpis sodales, a posuere lectus aliquam. Praesent et nisl dui. Mauris porttitor accumsan felis, eu sodales nibh ornare quis. Aenean rutrum purus eget condimentum condimentum. Duis cursus aliquet diam, eu fringilla dui mattis a. Donec ac odio a neque congue tristique vel et nibh. Nullam iaculis eget nisi ac finibus. Quisque sit amet erat lectus.
+> Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec vel vulputate justo. Quisque auctor mauris eu lacus viverra, sit amet ultricies ligula malesuada. Nunc tempus dui eget ante sollicitudin elementum et ut felis. Nam tristique mauris non turpis sodales, a posuere lectus aliquam. 
 
 :::
 
