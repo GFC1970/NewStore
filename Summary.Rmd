@@ -1,0 +1,115 @@
+---
+title: "New Store"
+author: "Graham Cox"
+date: "`r format(Sys.time(), '%b %Y')`"
+output: 
+  html_document:
+    number_sections: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo=FALSE, include=FALSE, warning=FALSE, message=FALSE}
+source("data-prepare.R")
+```
+
+```{css echo=FALSE}
+body * {font-family: Roboto Condensed, Arial}
+h1 {background: rgb(1, 142, 160);padding:7px 0px;color:white}
+h2 {border-bottom:3px solid rgb(1, 142, 160);padding:7px 0px}
+.sec-head {font-size:12pt}
+.columns {display: flex}
+```
+
+# Summary
+
+<span class="sec-head">
+Duis ornare id est at luctus. Integer pretium blandit arcu, at aliquet mauris auctor eget. Duis placerat porttitor nisl eget aliquam. Nam libero eros, imperdiet a dolor sed, pulvinar tristique metus. Etiam nisi quam, efficitur vel finibus vitae, blandit at dolor. Vestibulum dapibus neque vel leo dapibus pretium. Ut accumsan, ex at cursus fermentum, metus ligula volutpat libero, id viverra orci dolor non eros. Mauris quis turpis in lectus cursus bibendum. Sed cursus justo eget mollis porta.</span>
+
+<hr class="hrule" />
+
+
+:::::: {.columns}
+
+::: {.column width="60%"}
+<br />
+<span style="color:#018ea0;font-size:30pt;margin-left:10%">
+Revenue - `r scales::dollar(sum(data_tbl$total_revenue), accuracy = 1, prefix = "£")` 
+</span>
+<br/>
+<span style="color:#C71B00;font-size:30pt;margin-left:10%">
+COGS - `r scales::dollar(sum(data_tbl$total_cogs), accuracy = 1, prefix = "£")` 
+</span>
+<br />
+<span style="color:#8A4198;font-size:30pt;margin-left:10%;font-weight:700">
+Profit - `r scales::dollar(sum(data_tbl$total_revenue) - sum(data_tbl$total_cogs), accuracy = 1, prefix = "£")` 
+</span>
+
+:::
+
+::: {.column width="40%"}
+
+> Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec vel vulputate justo. Quisque auctor mauris eu lacus viverra, sit amet ultricies ligula malesuada. Nunc tempus dui eget ante sollicitudin elementum et ut felis. Nam tristique mauris non turpis sodales, a posuere lectus aliquam. Praesent et nisl dui. Mauris porttitor accumsan felis, eu sodales nibh ornare quis. Aenean rutrum purus eget condimentum condimentum. Duis cursus aliquet diam, eu fringilla dui mattis a. Donec ac odio a neque congue tristique vel et nibh. Nullam iaculis eget nisi ac finibus. Quisque sit amet erat lectus.
+
+:::
+
+::::::
+
+## Revenue Overview
+
+<span class="sec-head">
+Sed pretium tellus in turpis dapibus faucibus. Phasellus vel libero ultricies dui pharetra dignissim. Integer euismod dui rutrum mauris commodo, sagittis dapibus est mattis. Nunc venenatis purus pretium lorem sagittis, eget iaculis tellus imperdiet. Mauris sed diam non nunc finibus viverra. In quis ex vel justo molestie dapibus. Phasellus porta dignissim orci, non maximus odio placerat vel. Maecenas luctus viverra arcu eu accumsan.
+
+Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec vel vulputate justo. Quisque auctor mauris eu lacus viverra, sit amet ultricies ligula malesuada. Nunc tempus dui eget ante sollicitudin elementum et ut felis. Nam tristique mauris non turpis sodales, a posuere lectus aliquam. Praesent et nisl dui. Mauris porttitor accumsan felis, eu sodales nibh ornare quis. Aenean rutrum purus eget condimentum condimentum. Duis cursus aliquet diam, eu fringilla dui mattis a. Donec ac odio a neque congue tristique vel et nibh. Nullam iaculis eget nisi ac finibus. Quisque sit amet erat lectus.
+</span>
+
+:::::: {.columns}
+
+::: {.column width="40%"}
+
+> Vivamus tincidunt vestibulum ligula, in suscipit nisl fringilla ut. Quisque id placerat odio, eget tempor elit. Nunc convallis turpis mauris, eget bibendum dui congue et. Duis tempus metus nulla, nec posuere dui sagittis sed. Morbi viverra, magna id blandit molestie, ex arcu malesuada quam, vitae volutpat nulla magna non nibh. Curabitur dictum dictum tortor vel hendrerit. Donec sagittis odio sit amet ante laoreet porttitor. Nulla velit magna, imperdiet nec orci sed, egestas pulvinar nisi. Curabitur accumsan ex id nunc ullamcorper dictum. Pellentesque aliquet ipsum ac erat finibus, et venenatis quam faucibus. Integer eget felis faucibus, dictum sem eu, porttitor nisi. Duis vestibulum, elit non vestibulum porttitor, ipsum libero efficitur orci, quis tristique felis risus sed felis. Nunc metus eros, vulputate eu metus vel, tempus sollicitudin dolor. Vestibulum ullamcorper bibendum leo, non auctor ante dignissim imperdiet.
+
+
+:::
+
+::: {.column width="60%"}
+
+
+```{r echo=FALSE, include=TRUE, out.width="100%"}
+
+data_tbl %>% 
+  select(order_date, total_revenue) %>% 
+  mutate(yr = order_date %>% year() %>% as_factor()) %>% 
+  group_by(yr) %>% 
+  summarise(rev = sum(total_revenue), .groups = "drop") %>% 
+  ggplot(aes(yr, rev)) +
+  geom_col(fill = "#FF6F00", width = .8, colour = "grey50") +
+  labs(
+    title = "Total Revenue",
+    x = NULL,
+    y = NULL
+  ) +
+  scale_y_continuous(expand = expansion(mult = c(0.01, .4)), labels = scales::dollar_format(accuracy = 1)) +
+  theme_minimal(base_size = 14, base_family = "Roboto Condensed") +
+  theme(
+    axis.text.x = element_text(face = "bold"),
+    panel.grid = element_blank(),
+    panel.grid.major.y = element_line(colour = "grey70", linetype = "dotted"),
+    axis.line.x = element_line(colour = "grey60")
+  )
+
+```
+
+:::
+
+
+
+:::::
+
+
+## Cost Overview
+
+
+## Profit Overview
