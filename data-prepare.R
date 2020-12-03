@@ -2,15 +2,11 @@
 
 msg <- paste0("Start Process : \t\t", Sys.time())
 
-options(echo = FALSE)
+options(echo = FALSE, message = FALSE, warning = FALSE)
 
 msg <- paste0(msg, "\nLoad Libraries : \t\t", Sys.time())
 
-pacman::p_load(tidytext,
-               tidyverse,
-               lubridate,
-               extrafont,
-               ggsci)
+source("config.R")
 
 # Load Libraries
 # library(tidytext)
